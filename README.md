@@ -37,11 +37,20 @@ git clone https://github.com/DEV3L/ai-trello-extract
 cd ai-trello-extract
 ```
 
-Copy the env.local file to a new file named .env and replace `TRELLO_API_KEY` with your actual Trello API key:
+Copy the env.local file to a new file named .env and replace the placeholder environment variables with your actual Trello API key:
 
 ```bash
-cp env.local .env
+cp env.default .env
 ```
+
+#### Environment Variables
+
+The following environment variables can be configured in the `.env` file:
+
+- `TRELLO_API_KEY`: The Trello API key
+- `TRELLO_API_TOKEN`: The Trello API token
+- `TRELLO_BOARD_NAME`: The Trello board name
+- `OUTPUT_DIRECTORY`: The output directory
 
 ### 3. Setup a virtual environment with dependencies and activate it:
 
@@ -51,12 +60,6 @@ hatch env create
 hatch shell
 ```
 
-### 4. Extract the Trello data:
-
-```bash
-python trello_integration.py
-```
-
 #### Usage
 
 The `trello_integration.py` script will:
@@ -64,14 +67,6 @@ The `trello_integration.py` script will:
 1. Authenticate with the Trello API using the credentials provided in the `.env` file.
 2. Fetch and print the details of all accessible Trello boards.
 3. Fetch and print the lists and cards from the first Trello board in the list.
-
-## Environment Variables
-
-The following environment variables can be configured in the `.env` file:
-
-- `TRELLO_API_KEY`: The Trello API key
-- `TRELLO_API_TOKEN`: The Trello API token
-- `TRELLO_BOARD_NAME`: The Trello board name
 
 ## Testing
 
@@ -95,10 +90,36 @@ Command + Shift + P => Coverage Gutters: Watch
 
 ## Example
 
+Example Trello Board: [AI Trello Extract Example](https://trello.com/invite/b/66bb5639bc7ede83da207f39/ATTId6fc81bc36d22d92f14c3943b237d19cE7C5BFE1/ai-trello-extract-example)
+
 ## Example Program
 
 ```
+from loguru import logger
 
+from ai_trello_extract.clients.trello_client import get_trello_client
+from ai_trello_extract.env_variables import ENV_VARIABLES, set_env_variables
+from ai_trello_extract.orchestrators.orchestration_service import OrchestrationService
+from ai_trello_extract.services.trello_service import TrelloService
+
+
+def main():
+    orchestration_service = OrchestrationService(
+        TrelloService(get_trello_client(ENV_VARIABLES.trello_api_key, ENV_VARIABLES.trello_api_token))
+    )
+
+    try:
+        markdown_file_name = orchestration_service.write_board_markdown_to_file(
+            ENV_VARIABLES.trello_board_name, ENV_VARIABLES.output_directory
+        )
+        logger.info(f"Markdown file written to {markdown_file_name}")
+    except RuntimeError as e:
+        logger.error(e)
+
+
+if __name__ == "__main__":
+    set_env_variables()
+    main()
 ```
 
 ### Example Output

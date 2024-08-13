@@ -10,12 +10,27 @@ from ai_trello_extract.services.trello_service import TrelloService
 
 
 @pytest.fixture
-def trello_service(mock_trello_client: TrelloClient):
+def trello_service(mock_trello_client: TrelloClient) -> TrelloService:
+    """
+    Fixture to provide a TrelloService instance with a mocked Trello client.
+
+    Args:
+        mock_trello_client (TrelloClient): A mocked Trello client.
+
+    Returns:
+        TrelloService: An instance of TrelloService.
+    """
     return TrelloService(client=mock_trello_client)
 
 
 @pytest.fixture
-def trello_card():
+def trello_card() -> TrelloCard:
+    """
+    Fixture to provide a TrelloCard instance with predefined attributes.
+
+    Returns:
+        TrelloCard: An instance of TrelloCard with predefined attributes.
+    """
     return TrelloCard(
         title="Title",
         list_name="To Do",
@@ -27,13 +42,29 @@ def trello_card():
 
 
 @pytest.fixture
-def mock_trello_client():
+def mock_trello_client() -> MagicMock:
+    """
+    Fixture to provide a mocked Trello client.
+
+    Returns:
+        MagicMock: A mocked Trello client.
+    """
     return MagicMock(spec=TrelloClient)
 
 
 @pytest.fixture
-def mock_board(mock_card: Card):
-    def build_trello_list(list_name: str, mock_card: Card):
+def mock_board(mock_card: Card) -> MagicMock:
+    """
+    Fixture to provide a mocked Trello board with predefined lists and cards.
+
+    Args:
+        mock_card (Card): A mocked Trello card.
+
+    Returns:
+        MagicMock: A mocked Trello board.
+    """
+
+    def build_trello_list(list_name: str, mock_card: Card) -> MagicMock:
         trello_list = MagicMock(spec=TrelloList)
         trello_list.name = list_name
         trello_list.list_cards.return_value = [mock_card]
@@ -58,14 +89,26 @@ def mock_board(mock_card: Card):
 
 
 @pytest.fixture
-def mock_trello_list():
+def mock_trello_list() -> MagicMock:
+    """
+    Fixture to provide a mocked Trello list.
+
+    Returns:
+        MagicMock: A mocked Trello list.
+    """
     mock_list = MagicMock(spec=TrelloList)
     mock_list.name = "Doing"
     return mock_list
 
 
 @pytest.fixture
-def mock_card():
+def mock_card() -> MagicMock:
+    """
+    Fixture to provide a mocked Trello card with predefined attributes.
+
+    Returns:
+        MagicMock: A mocked Trello card.
+    """
     label_one = MagicMock(spec=Label)
     label_one.name = "Label1"
     label_two = MagicMock(spec=Label)

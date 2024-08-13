@@ -7,6 +7,9 @@ from ai_trello_extract.formatters.generate_markdown import generate_markdown
 
 
 def test_headers():
+    """
+    Test that generate_markdown correctly generates headers for each category.
+    """
     expected_markdown = """# PLANNING
 
 This is a list of cards, work items, user stories, and tasks that are in the planning category.
@@ -32,6 +35,7 @@ This is a list of cards, work items, user stories, and tasks that are in the use
 This is a list of cards, work items, user stories, and tasks that are in the team category.
 """
 
+    # Create a categorized list with one card in each category
     categorized_list = CategorizedLists(
         planning=[build_trello_card()],
         todo=[build_trello_card()],
@@ -43,10 +47,14 @@ This is a list of cards, work items, user stories, and tasks that are in the tea
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown matches the expected output
     assert markdown == expected_markdown
 
 
 def test_card_title_names():
+    """
+    Test that generate_markdown correctly includes card titles in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -56,6 +64,7 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 ## Title: Title 2
 """
 
+    # Create a categorized list with cards having specific titles
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(title="Title 1"),
@@ -65,10 +74,14 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes the card titles
     assert markdown == expected_markdown
 
 
 def test_card_list_names():
+    """
+    Test that generate_markdown correctly includes card list names in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -78,6 +91,7 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 ## List Name: List Name 2
 """
 
+    # Create a categorized list with cards having specific list names
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(list_name="List Name 1"),
@@ -87,10 +101,14 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes the card list names
     assert markdown == expected_markdown
 
 
 def test_card_labels():
+    """
+    Test that generate_markdown correctly includes card labels in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -103,6 +121,7 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 - urgent
 """
 
+    # Create a categorized list with cards having specific labels
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(list_name="List Name 1", labels=["bug", "urgent"]),
@@ -111,10 +130,14 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes the card labels
     assert markdown == expected_markdown
 
 
 def test_card_done_date():
+    """
+    Test that generate_markdown correctly includes card done dates in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -124,6 +147,7 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 ## Done Date: 2024-05-01 00:00:00
 """
 
+    # Create a categorized list with cards having specific done dates
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(
@@ -135,10 +159,14 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes the card done dates
     assert markdown == expected_markdown
 
 
 def test_card_descriptions():
+    """
+    Test that generate_markdown correctly includes card descriptions in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -153,9 +181,10 @@ Description of task 1
 
 ## Description
 
-#### Description of task 2
+# Description of task 2
 """
 
+    # Create a categorized list with cards having specific descriptions
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(list_name="List Name 1", description="Description of task 1"),
@@ -165,10 +194,14 @@ Description of task 1
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes the card descriptions
     assert markdown == expected_markdown
 
 
 def test_card_comments():
+    """
+    Test that generate_markdown correctly includes card comments in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -182,6 +215,7 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 Comment 1
 """
 
+    # Create a categorized list with cards having specific comments
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(list_name="List Name 1", comments=["---", "Comment 1"]),
@@ -190,10 +224,14 @@ Comment 1
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes the card comments
     assert markdown == expected_markdown
 
 
 def test_generate_markdown():
+    """
+    Test that generate_markdown correctly includes all card attributes in the markdown.
+    """
     expected_markdown = """# TODO
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
@@ -218,6 +256,7 @@ Description of task 1
 Comment 1
 """
 
+    # Create a categorized list with a card having all attributes
     categorized_list = CategorizedLists(
         todo=[
             build_trello_card(
@@ -233,6 +272,7 @@ Comment 1
 
     markdown = generate_markdown(categorized_list)
 
+    # Verify that the generated markdown includes all card attributes
     assert markdown == expected_markdown
 
 
@@ -244,7 +284,21 @@ def build_trello_card(
     labels: list[str] = [],
     comments: list[str] = [],
     done_date: datetime | Literal[""] = "",
-):
+) -> TrelloCard:
+    """
+    Helper function to build a TrelloCard with default values.
+
+    Args:
+        title (str): The title of the card.
+        list_name (str): The name of the list the card belongs to.
+        description (str): The description of the card.
+        labels (list[str]): The labels associated with the card.
+        comments (list[str]): The comments on the card.
+        done_date (datetime | Literal[""]): The done date of the card.
+
+    Returns:
+        TrelloCard: The constructed TrelloCard object.
+    """
     return TrelloCard(
         title=title,
         list_name=list_name,
