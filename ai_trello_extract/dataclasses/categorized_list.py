@@ -11,13 +11,13 @@ class CategorizedLists(Generic[T]):
     A generic dataclass to categorize items into different lists.
 
     Attributes:
-        planning (list[T]): Items planned to be done.
+        backlog (list[T]): Items planned to be done.
         todo (list[T]): Items to be done.
         doing (list[T]): Items currently being worked on.
         done (list[T]): Items that have been completed.
     """
 
-    planning: list[T] = field(default_factory=list)
+    backlog: list[T] = field(default_factory=list)
     todo: list[T] = field(default_factory=list)
     doing: list[T] = field(default_factory=list)
     done: list[T] = field(default_factory=list)

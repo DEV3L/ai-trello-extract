@@ -39,16 +39,15 @@ def trello_list_reducer(accumulator: CategorizedLists, trello_list: TrelloList) 
     Returns:
         CategorizedLists: The updated accumulator with the Trello list categorized.
     """
-    if trello_list.name in ["Icebox", "Epics"]:
-        accumulator.planning.append(trello_list)
-    elif trello_list.name in ["Backlog"]:
+    if trello_list.name in ["Backlog"]:
+        accumulator.backlog.append(trello_list)
+    elif trello_list.name in ["Todo"]:
         accumulator.todo.append(trello_list)
     elif trello_list.name in ["Doing"]:
         accumulator.doing.append(trello_list)
-    elif trello_list.name in ["Target User Personas"]:
-        accumulator.users.append(trello_list)
-    elif trello_list.name in ["Virtual Team"]:
-        accumulator.team.append(trello_list)
-    else:
+    elif trello_list.name in ["Done"]:
         accumulator.done.append(trello_list)
+    else:
+        pass
+
     return accumulator

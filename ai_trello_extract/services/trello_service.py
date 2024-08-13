@@ -47,14 +47,12 @@ class TrelloService:
 
         logger.debug(f"Extracting Trello Cards from categorized lists: {categorized_lists}")
 
-        planning = extract_card_info_from_list(categorized_lists.planning)
+        planning = extract_card_info_from_list(categorized_lists.backlog)
         todo = extract_card_info_from_list(categorized_lists.todo)
         doing = extract_card_info_from_list(categorized_lists.doing)
         done = extract_card_info_from_list(categorized_lists.done)
-        users = extract_card_info_from_list(categorized_lists.users)
-        team = extract_card_info_from_list(categorized_lists.team)
 
-        return CategorizedLists(planning=planning, todo=todo, doing=doing, done=done, users=users, team=team)
+        return CategorizedLists(backlog=planning, todo=todo, doing=doing, done=done)
 
     def categorize_lists(self, board: Board) -> CategorizedLists[TrelloList]:
         """
@@ -71,7 +69,7 @@ class TrelloService:
         return reduce(
             trello_list_reducer,
             filtered_trello_lists,
-            CategorizedLists[TrelloList](planning=[], todo=[], doing=[], done=[], users=[], team=[]),
+            CategorizedLists[TrelloList](backlog=[], todo=[], doing=[], done=[]),
         )
 
     def get_board_by_name(self, board_name: str) -> Board:

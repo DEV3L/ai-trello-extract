@@ -125,32 +125,65 @@ if __name__ == "__main__":
 ### Example Output
 
 ```
-# TODO
+# BACKLOG
 
-## Title
+This is a list of cards, work items, user stories, and tasks that are in the backlog category.
 
-Title 1
+## Title: Integrate into other projects
 
-## List Name
-
-Task 1
+## List Name: Backlog
 
 ## Labels
 
-- bug
-- urgent
+- Future
 
-## Due Date
+# TODO
 
-2024-05-01 00:00:00
+This is a list of cards, work items, user stories, and tasks that are in the todo category.
+
+## Title: Test and Make Sure It Works
+
+## List Name: Todo
+
+## Labels
+
+- Testing
 
 ## Description
 
-Description of task 1
+Need to verify the code works as planned
 
-## Comments
+# DOING
 
-Comment 1
+This is a list of cards, work items, user stories, and tasks that are in the doing category.
+
+## Title: Upload to PyPI
+
+## List Name: Doing
+
+## Labels
+
+- Code
+
+# DONE
+
+This is a list of cards, work items, user stories, and tasks that are in the done category.
+
+## Title: Make new project
+
+## List Name: Done
+
+## Labels
+
+- Code
+
+## Description
+
+Create the project for uploading to PyPI
+
+### Comments
+
+Use existing ai-assistant-manager project as a base
 ```
 
 ## Contributing

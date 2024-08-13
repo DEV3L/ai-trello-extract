@@ -71,14 +71,11 @@ def mock_board(mock_card: Card) -> MagicMock:
         return trello_list
 
     all_lists = [
-        "Icebox",
-        "Epics",
         "Backlog",
+        "Todo",
         "Doing",
-        "Done 🎉",
-        "Virtual Team",
-        "Product",
-        "Target User Personas",
+        "Done",
+        "Other",
         "_",
     ]
 

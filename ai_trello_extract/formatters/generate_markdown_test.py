@@ -10,9 +10,9 @@ def test_headers():
     """
     Test that generate_markdown correctly generates headers for each category.
     """
-    expected_markdown = """# PLANNING
+    expected_markdown = """# BACKLOG
 
-This is a list of cards, work items, user stories, and tasks that are in the planning category.
+This is a list of cards, work items, user stories, and tasks that are in the backlog category.
 
 # TODO
 
@@ -25,24 +25,14 @@ This is a list of cards, work items, user stories, and tasks that are in the doi
 # DONE
 
 This is a list of cards, work items, user stories, and tasks that are in the done category.
-
-# USERS
-
-This is a list of cards, work items, user stories, and tasks that are in the users category.
-
-# TEAM
-
-This is a list of cards, work items, user stories, and tasks that are in the team category.
 """
 
     # Create a categorized list with one card in each category
     categorized_list = CategorizedLists(
-        planning=[build_trello_card()],
+        backlog=[build_trello_card()],
         todo=[build_trello_card()],
         doing=[build_trello_card()],
         done=[build_trello_card()],
-        users=[build_trello_card()],
-        team=[build_trello_card()],
     )
 
     markdown = generate_markdown(categorized_list)
@@ -181,7 +171,7 @@ Description of task 1
 
 ## Description
 
-# Description of task 2
+#### Description of task 2
 """
 
     # Create a categorized list with cards having specific descriptions

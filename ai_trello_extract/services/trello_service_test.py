@@ -22,15 +22,13 @@ def test_extract_cards_info(
     """
     categorized_lists = trello_service.extract_cards_info(mock_board)
 
-    assert len(categorized_lists.planning) == 2
+    assert len(categorized_lists.backlog) == 1
     assert len(categorized_lists.todo) == 1
     assert len(categorized_lists.doing) == 1
-    assert len(categorized_lists.done) == 2
-    assert len(categorized_lists.users) == 1
-    assert len(categorized_lists.team) == 1
+    assert len(categorized_lists.done) == 1
 
     card_info = categorized_lists.todo[0]
-    assert card_info.list_name == "Backlog"
+    assert card_info.list_name == "Todo"
     assert card_info.description == "Test card description"
     assert card_info.labels == ["Label1", "Label2"]
     assert card_info.comments == ["Test comment"]
@@ -47,12 +45,11 @@ def test_categorize_lists(trello_service: TrelloService, mock_board: Board):
     """
     categorized = trello_service.categorize_lists(mock_board)
 
-    assert len(categorized.planning) == 2
+    assert len(categorized.backlog) == 1
     assert len(categorized.todo) == 1
     assert len(categorized.doing) == 1
-    assert len(categorized.done) == 2
-    assert len(categorized.users) == 1
-    assert len(categorized.team) == 1
+    assert len(categorized.done) == 1
+    assert all("_" not in lst.name for lst in categorized.todo)
     assert all("_" not in lst.name for lst in categorized.todo)
     assert all("_" not in lst.name for lst in categorized.doing)
     assert all("_" not in lst.name for lst in categorized.done)

@@ -114,7 +114,7 @@ def test_get_board_json(mock_board: Board, trello_card: TrelloCard):
     Test that get_board_json correctly generates JSON for a Trello board.
     """
     expected_json = {
-        "planning": [],
+        "backlog": [],
         "todo": [
             {
                 "title": "Title",
@@ -127,8 +127,6 @@ def test_get_board_json(mock_board: Board, trello_card: TrelloCard):
         ],
         "doing": [],
         "done": [],
-        "users": [],
-        "team": [],
     }
 
     # Mock the TrelloService to return predefined values
