@@ -10,7 +10,7 @@ license = { file = "LICENSE" }
 readme = "README.md"
 authors = [{ name = "Justin Beall", email = "jus.beall@gmail.com" }]
 requires-python = ">=3.12"
-dependencies = ["loguru", "python-dotenv", "twine"]
+dependencies = ["loguru", "py-trello-api", "python-dotenv", "twine"]
 keywords = [
     "",
 ]
