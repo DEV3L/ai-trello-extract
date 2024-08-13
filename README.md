@@ -37,12 +37,9 @@ hatch shell
 
 The following environment variables can be configured in the `.env` file:
 
-- `OPENAI_MODEL`: The model to use (default: `gpt-4o`)
-- `ASSISTANT_DESCRIPTION`: Description of the assistant (default: `AI Assistant Manager`)
-- `ASSISTANT_NAME`: Name of the assistant (default: `AI Assistant Manager`)
-- `BIN_DIR`: Directory for binaries (default: `bin`)
-- `DATA_DIR`: Directory for data files (default: `data`)
-- `DATA_FILE_PREFIX`: Prefix for data files (default: `AI Assistant Manager`)
+- `TRELLO_API_KEY`: The Trello API key
+- `TRELLO_API_TOKEN`: The Trello API token
+- `TRELLO_BOARD_NAME`: The Trello board name
 
 ## Testing
 
