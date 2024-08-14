@@ -62,7 +62,7 @@ hatch shell
 
 #### Usage
 
-The `trello_integration.py` script will:
+The `run_end_to_end.py` script will:
 
 1. Authenticate with the Trello API using the credentials provided in the `.env` file.
 2. Fetch and print the details of all accessible Trello boards.
