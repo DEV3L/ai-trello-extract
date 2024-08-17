@@ -83,7 +83,11 @@ def test_write_board_markdown_to_directory(mock_generate_markdown: MagicMock, tm
     """
     Test that write_board_markdown_to_directory correctly writes markdown to a directory.
     """
-    mock_generate_markdown.return_value = "# Mock Markdown Content"
+    expected_date = datetime.now().strftime("%m-%d-%Y")
+
+    first_contents = "# Mock Markdown Content\nSome other content"
+    second_contents = "# New Header"
+    mock_generate_markdown.return_value = f"{first_contents}\n{second_contents}"
 
     mock_trello_service = MagicMock(spec=TrelloService)
     mock_trello_service.get_board_by_name.return_value = "mock_board"
@@ -105,8 +109,14 @@ def test_write_board_markdown_to_directory(mock_generate_markdown: MagicMock, tm
     first_file = glob.glob(os.path.join(str(dir_path), "*"))[0]
 
     with open(first_file, "r") as file:
-        content = file.read()
-    assert content == f"{datetime.now().strftime('%m-%d-%Y')}\n\n# Mock Markdown Content\n"
+        first_file_contents = file.read()
+    assert first_file_contents == f"{expected_date}\n\n{second_contents}\n"
+
+    second_file = glob.glob(os.path.join(str(dir_path), "*"))[1]
+
+    with open(second_file, "r") as file:
+        second_file_contents = file.read()
+    assert second_file_contents == f"{expected_date}\n\n{first_contents}"
 
 
 def test_write_board_json_to_file(tmpdir: Path):

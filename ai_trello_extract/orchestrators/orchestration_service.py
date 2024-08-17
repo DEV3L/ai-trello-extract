@@ -86,17 +86,12 @@ class OrchestrationService:
         """
         grouped_lines = groupby(lines, key=lambda line: line.startswith("# "))
         headers = [
-            (header[2:], f"{header}\n" + "\n".join(content).strip())
+            (header[2:], f"{datetime.now().strftime('%m-%d-%Y')}\n\n{header}\n" + "\n".join(content).strip())
             for is_header, group in grouped_lines
             if is_header
             for header in group
             for _, content in [next(grouped_lines, (False, []))]
         ]
-
-        if headers:
-            date_str = datetime.now().strftime("%m-%d-%Y")
-            first_header, first_content = headers[0]
-            headers[0] = (first_header, f"{date_str}\n\n{first_content}")
 
         return headers
 
