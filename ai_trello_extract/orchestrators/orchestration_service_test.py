@@ -110,13 +110,13 @@ def test_write_board_markdown_to_directory(mock_generate_markdown: MagicMock, tm
 
     with open(first_file, "r") as file:
         first_file_contents = file.read()
-    assert first_file_contents == f"{expected_date}\n\n{second_contents}\n"
+    assert first_file_contents == f"{expected_date}\n\n{first_contents}"
 
     second_file = glob.glob(os.path.join(str(dir_path), "*"))[1]
 
     with open(second_file, "r") as file:
         second_file_contents = file.read()
-    assert second_file_contents == f"{expected_date}\n\n{first_contents}"
+    assert second_file_contents == f"{expected_date}\n\n{second_contents}\n"
 
 
 def test_write_board_json_to_file(tmpdir: Path):

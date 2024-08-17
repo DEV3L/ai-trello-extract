@@ -52,8 +52,10 @@ class OrchestrationService:
         markdown_content = self.get_board_markdown(board_name)
         transformed_markdown_content = self._extract_markdown_into_collections(markdown_content)
 
-        for title, content in transformed_markdown_content:
-            file_path = os.path.join(dir_path, f"{board_name} Trello Status {title}.txt")
+        for index, (title, content) in enumerate(transformed_markdown_content):
+            index_str = f"{index:03}"  # Format index as a three-character string, zero-filled
+
+            file_path = os.path.join(dir_path, f"{index_str} {board_name} Trello Status {title}.txt")
             with open(file_path, "w") as file:
                 file.write(content)  # Write each section's content to a separate file
 
