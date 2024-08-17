@@ -15,7 +15,12 @@ def main():
         markdown_file_name = orchestration_service.write_board_markdown_to_file(
             ENV_VARIABLES.trello_board_name, ENV_VARIABLES.output_directory
         )
-        logger.info(f"Markdown file written to {markdown_file_name}")
+        logger.info(f"Markdown file written to file {markdown_file_name}")
+
+        markdown_directory_name = orchestration_service.write_board_markdown_to_directory(
+            ENV_VARIABLES.trello_board_name, ENV_VARIABLES.output_directory
+        )
+        logger.info(f"Markdown file written to directory {markdown_directory_name}")
     except RuntimeError as e:
         logger.error(e)
 

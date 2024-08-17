@@ -1,5 +1,6 @@
 import json
 import os
+from itertools import groupby
 
 from ai_trello_extract.formatters.generate_markdown import generate_markdown
 from ai_trello_extract.services.trello_service import TrelloService
@@ -32,6 +33,66 @@ class OrchestrationService:
         with open(file_path, "w") as file:
             file.write(markdown_content)  # Write the markdown content to the file
         return file_path
+
+    def write_board_markdown_to_directory(self, board_name: str, directory: str) -> str:
+        """
+        Generates markdown for a Trello board, splits it into sections, and writes each section to a separate file.
+
+        Args:
+            board_name (str): The name of the Trello board.
+            directory (str): The directory where the files will be saved.
+
+        Returns:
+            str: The path to the directory where the markdown files were written.
+        """
+        dir_path = os.path.join(directory, f"{board_name} Status Trello Board")
+        os.makedirs(dir_path, exist_ok=True)  # Ensure the directory exists
+
+        markdown_content = self.get_board_markdown(board_name)
+        transformed_markdown_content = self._extract_markdown_into_collections(markdown_content)
+
+        for title, content in transformed_markdown_content:
+            file_path = os.path.join(dir_path, f"{board_name} Trello Status {title}.txt")
+            with open(file_path, "w") as file:
+                file.write(content)  # Write each section's content to a separate file
+
+        return dir_path
+
+    def _extract_markdown_into_collections(self, markdown_content: str) -> list[tuple[str, str]]:
+        """
+        Extracts lines starting with H1 headers and their content into a list of tuples.
+
+        Args:
+            markdown_content (str): The markdown content to process.
+
+        Returns:
+            list[tuple[str, str]]: A list of tuples where each tuple contains the header and its content.
+        """
+        lines = markdown_content.split("\n")
+        headers_and_content = self._extract_title_and_content(lines)
+
+        return headers_and_content
+
+    def _extract_title_and_content(self, lines):
+        """
+        Groups lines by headers and their content.
+
+        Args:
+            lines (list[str]): The lines of markdown content.
+
+        Returns:
+            list[tuple[str, str]]: A list of tuples where each tuple contains the header and its content.
+        """
+        grouped_lines = groupby(lines, key=lambda line: line.startswith("# "))
+        headers = [
+            (header[2:], f"{header}\n" + "\n".join(content).strip())
+            for is_header, group in grouped_lines
+            if is_header
+            for header in group
+            for _, content in [next(grouped_lines, (False, []))]
+        ]
+
+        return headers
 
     def get_board_markdown(self, board_name: str) -> str:
         """
@@ -66,7 +127,7 @@ class OrchestrationService:
 
         return file_path
 
-    def get_board_json(self, board_name: str):
+    def get_board_json(self, board_name: str) -> dict:
         """
         Retrieves the JSON representation of a Trello board.
 
