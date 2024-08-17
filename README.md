@@ -132,6 +132,18 @@ if __name__ == "__main__":
 ```
 AI Trello Extract Example Status Trello Board/
 ├── AI Trello Extract Example Trello Status BACKLOG.txt
+        | 08-17-2024
+        |
+        | # BACKLOG
+        | This is a list of cards, work items, user stories, and tasks that are in the backlog |--category.
+        |
+        | ## Title: Integrate into other projects
+        |
+        | ## List Name: Backlog
+        |
+        | ## Labels
+        |
+        | - Future
 ├── AI Trello Extract Example Trello Status DOING.txt
 ├── AI Trello Extract Example Trello Status DONE.txt
 └── AI Trello Extract Example Trello Status TODO.txt

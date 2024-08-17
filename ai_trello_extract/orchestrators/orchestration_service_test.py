@@ -1,5 +1,7 @@
 import glob
 import os
+from datetime import datetime
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from trello import Board
@@ -52,7 +54,7 @@ def test_get_board_markdown(mock_board: Board, trello_card: TrelloCard):
 
 
 @patch("ai_trello_extract.orchestrators.orchestration_service.generate_markdown")
-def test_write_board_markdown_to_file(mock_generate_markdown, tmpdir):
+def test_write_board_markdown_to_file(mock_generate_markdown: MagicMock, tmpdir: Path):
     """
     Test that write_board_markdown_to_file correctly writes markdown to a file.
     """
@@ -77,7 +79,7 @@ def test_write_board_markdown_to_file(mock_generate_markdown, tmpdir):
 
 
 @patch("ai_trello_extract.orchestrators.orchestration_service.generate_markdown")
-def test_write_board_markdown_to_directory(mock_generate_markdown, tmpdir):
+def test_write_board_markdown_to_directory(mock_generate_markdown: MagicMock, tmpdir: Path):
     """
     Test that write_board_markdown_to_directory correctly writes markdown to a directory.
     """
@@ -104,10 +106,10 @@ def test_write_board_markdown_to_directory(mock_generate_markdown, tmpdir):
 
     with open(first_file, "r") as file:
         content = file.read()
-    assert content == "# Mock Markdown Content\n"
+    assert content == f"{datetime.now().strftime('%m-%d-%Y')}\n\n# Mock Markdown Content\n"
 
 
-def test_write_board_json_to_file(tmpdir):
+def test_write_board_json_to_file(tmpdir: Path):
     """
     Test that write_board_json_to_file correctly writes JSON to a file.
     """

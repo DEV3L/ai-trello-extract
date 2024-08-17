@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from itertools import groupby
 
 from ai_trello_extract.formatters.generate_markdown import generate_markdown
@@ -91,6 +92,11 @@ class OrchestrationService:
             for header in group
             for _, content in [next(grouped_lines, (False, []))]
         ]
+
+        if headers:
+            date_str = datetime.now().strftime("%m-%d-%Y")
+            first_header, first_content = headers[0]
+            headers[0] = (first_header, f"{date_str}\n\n{first_content}")
 
         return headers
 
