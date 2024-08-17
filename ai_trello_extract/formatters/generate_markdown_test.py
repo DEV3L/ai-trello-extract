@@ -76,9 +76,9 @@ def test_card_list_names():
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
 
-## List Name: List Name 1
+### List Name: List Name 1
 
-## List Name: List Name 2
+### List Name: List Name 2
 """
 
     # Create a categorized list with cards having specific list names
@@ -103,9 +103,9 @@ def test_card_labels():
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
 
-## List Name: List Name 1
+### List Name: List Name 1
 
-## Labels
+### Labels
 
 - bug
 - urgent
@@ -132,9 +132,9 @@ def test_card_done_date():
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
 
-## List Name: List Name 1
+### List Name: List Name 1
 
-## Done Date: 2024-05-01 00:00:00
+### Done Date: 2024-05-01 00:00:00
 """
 
     # Create a categorized list with cards having specific done dates
@@ -161,15 +161,15 @@ def test_card_descriptions():
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
 
-## List Name: List Name 1
+### List Name: List Name 1
 
-## Description
+### Description
 
 Description of task 1
 
-## List Name: List Name 2
+### List Name: List Name 2
 
-## Description
+### Description
 
 #### Description of task 2
 """
@@ -196,9 +196,9 @@ def test_card_comments():
 
 This is a list of cards, work items, user stories, and tasks that are in the todo category.
 
-## List Name: List Name 1
+### List Name: List Name 1
 
-### Comments
+#### Comments
 
 - - -
 
@@ -228,20 +228,20 @@ This is a list of cards, work items, user stories, and tasks that are in the tod
 
 ## Title: Title 1
 
-## List Name: List Name 1
+### List Name: List Name 1
 
-## Labels
+### Labels
 
 - bug
 - urgent
 
-## Done Date: 2024-05-01 00:00:00
+### Done Date: 2024-05-01 00:00:00
 
-## Description
+### Description
 
 Description of task 1
 
-### Comments
+#### Comments
 
 Comment 1
 """

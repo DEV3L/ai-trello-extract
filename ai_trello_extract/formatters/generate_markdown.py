@@ -55,12 +55,12 @@ def format_card(card: TrelloCard) -> list[str]:
     """
     # Format each attribute of the card into markdown lines if it exists
     title_lines = [f"## Title: {card.title}", ""] if card.title else []
-    list_name_lines = [f"## List Name: {card.list_name}", ""] if card.list_name else []
-    labels_lines = ["## Labels", ""] + [f"- {label}" for label in card.labels] + [""] if card.labels else []
-    done_date_lines = [f"## Done Date: {card.done_date}", ""] if card.done_date else []
-    description_lines = ["## Description", "", escape_markdown(card.description), ""] if card.description else []
+    list_name_lines = [f"### List Name: {card.list_name}", ""] if card.list_name else []
+    labels_lines = ["### Labels", ""] + [f"- {label}" for label in card.labels] + [""] if card.labels else []
+    done_date_lines = [f"### Done Date: {card.done_date}", ""] if card.done_date else []
+    description_lines = ["### Description", "", escape_markdown(card.description), ""] if card.description else []
     comments_lines = (
-        ["### Comments", ""] + [f"{escape_markdown(comment)}\n" for comment in card.comments] if card.comments else []
+        ["#### Comments", ""] + [f"{escape_markdown(comment)}\n" for comment in card.comments] if card.comments else []
     )
 
     # Combine all the formatted lines into a single list
