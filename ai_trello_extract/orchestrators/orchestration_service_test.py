@@ -8,8 +8,9 @@ from trello import Board
 
 from ai_trello_extract.dataclasses.categorized_list import CategorizedLists
 from ai_trello_extract.dataclasses.trello_card import TrelloCard
-from ai_trello_extract.orchestrators.orchestration_service import OrchestrationService
 from ai_trello_extract.services.trello_service import TrelloService
+
+from .orchestration_service import OrchestrationService
 
 expected_markdown = """# TODO
 
@@ -37,9 +38,6 @@ Test comment
 
 
 def test_get_board_markdown(mock_board: Board, trello_card: TrelloCard):
-    """
-    Test that get_board_markdown correctly generates markdown for a Trello board.
-    """
     mock_trello_service = MagicMock(spec=TrelloService)
     mock_trello_service.get_board_by_name.return_value = mock_board
     mock_trello_service.extract_cards_info.return_value = CategorizedLists(todo=[trello_card])
@@ -55,9 +53,6 @@ def test_get_board_markdown(mock_board: Board, trello_card: TrelloCard):
 
 @patch("ai_trello_extract.orchestrators.orchestration_service.generate_markdown")
 def test_write_board_markdown_to_file(mock_generate_markdown: MagicMock, tmpdir: Path):
-    """
-    Test that write_board_markdown_to_file correctly writes markdown to a file.
-    """
     mock_generate_markdown.return_value = "# Mock Markdown Content"
 
     mock_trello_service = MagicMock(spec=TrelloService)
@@ -80,9 +75,6 @@ def test_write_board_markdown_to_file(mock_generate_markdown: MagicMock, tmpdir:
 
 @patch("ai_trello_extract.orchestrators.orchestration_service.generate_markdown")
 def test_write_board_markdown_to_directory(mock_generate_markdown: MagicMock, tmpdir: Path):
-    """
-    Test that write_board_markdown_to_directory correctly writes markdown to a directory.
-    """
     expected_date = datetime.now().strftime("%m-%d-%Y")
 
     first_contents = "# Mock Markdown Content\nSome other content"
@@ -120,25 +112,18 @@ def test_write_board_markdown_to_directory(mock_generate_markdown: MagicMock, tm
 
 
 def test_write_board_json_to_file(tmpdir: Path):
-    """
-    Test that write_board_json_to_file correctly writes JSON to a file.
-    """
-    # Mock the TrelloService to return predefined values
     mock_trello_service = MagicMock(spec=TrelloService)
     mock_trello_service.get_board_by_name.return_value = "mock_board"
     mock_trello_service.extract_cards_info.return_value = MagicMock(to_dict=lambda: {})
 
-    # Initialize the OrchestrationService with the mocked TrelloService
     orchestration_service = OrchestrationService(trello_service=mock_trello_service)
 
     board_name = "TestBoard"
     directory = tmpdir.mkdir("markdown_files")
     file_path = os.path.join(directory, f"{board_name} Trello.json")
 
-    # Call the method to write JSON to a file
     result_path = orchestration_service.write_board_json_to_file(board_name, str(directory))
 
-    # Verify that the file path is correct and the content matches the expected output
     assert result_path == file_path
     with open(result_path, "r") as file:
         content = file.read()
@@ -146,9 +131,6 @@ def test_write_board_json_to_file(tmpdir: Path):
 
 
 def test_get_board_json(mock_board: Board, trello_card: TrelloCard):
-    """
-    Test that get_board_json correctly generates JSON for a Trello board.
-    """
     expected_json = {
         "backlog": [],
         "todo": [
@@ -165,18 +147,59 @@ def test_get_board_json(mock_board: Board, trello_card: TrelloCard):
         "done": [],
     }
 
-    # Mock the TrelloService to return predefined values
     mock_trello_service = MagicMock(spec=TrelloService)
     mock_trello_service.get_board_by_name.return_value = mock_board
     mock_trello_service.extract_cards_info.return_value = CategorizedLists(todo=[trello_card])
 
-    # Initialize the OrchestrationService with the mocked TrelloService
     orchestration_service = OrchestrationService(mock_trello_service)
     board_json = orchestration_service.get_board_json("Test Board")
 
-    # Verify that the generated JSON matches the expected output
     assert board_json == expected_json
 
-    # Ensure the TrelloService methods were called with the correct arguments
     mock_trello_service.get_board_by_name.assert_called_once_with("Test Board")
     mock_trello_service.extract_cards_info.assert_called_once_with(mock_trello_service.get_board_by_name.return_value)
+
+
+def test_add_card_to_board():
+    mock_trello_service = MagicMock(spec=TrelloService)
+    orchestration_service = OrchestrationService(mock_trello_service)
+
+    board_name = "Test Board"
+    card_name = "Test Card"
+    card_description = "This is a test card."
+
+    orchestration_service.add_card_to_board(board_name, card_name, card_description)
+
+    mock_trello_service.add_card_to_board.assert_called_once_with(board_name, card_name, card_description)
+
+
+def test_write_board_labels_to_file(tmpdir: Path):
+    mock_board = MagicMock(spec=Board)
+
+    mock_trello_service = MagicMock(spec=TrelloService)
+    mock_trello_service.get_board_by_name.return_value = mock_board
+
+    mock_label = MagicMock(id="abc")
+    mock_label.name = "Label1"
+
+    mock_board.get_labels.return_value = [mock_label]
+
+    orchestration_service = OrchestrationService(trello_service=mock_trello_service)
+
+    board_name = "TestBoard"
+    directory = tmpdir.mkdir("label_files")
+    file_path = os.path.join(directory, f"{board_name} Trello Board Labels.txt")
+
+    result_path = orchestration_service.write_board_labels_to_file(board_name, str(directory))
+
+    assert result_path == file_path
+    with open(result_path, "r") as file:
+        content = file.read()
+    expected_content = f"""# {board_name} Trello Board Labels
+
+## Label1
+- **Label:** Label1
+- **Id:** abc
+
+"""
+    assert content == expected_content

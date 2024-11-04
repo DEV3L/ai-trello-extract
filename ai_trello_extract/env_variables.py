@@ -15,6 +15,7 @@ class EnvVariables:
     trello_api_key: str
     trello_api_token: str
     trello_board_name: str
+    trello_board_add_column_name: str
     output_directory: str
 
 
@@ -34,6 +35,7 @@ def set_env_variables(env_file_path: str | None = None):
     ENV_VARIABLES.trello_api_key = os.getenv("TRELLO_API_KEY", "Trello API Key")
     ENV_VARIABLES.trello_api_token = os.getenv("TRELLO_API_TOKEN", "Trello API Token")
     ENV_VARIABLES.trello_board_name = os.getenv("TRELLO_BOARD_NAME", "Trello Board Name")
+    ENV_VARIABLES.trello_board_add_column_name = os.getenv("TRELLO_BOARD_ADD_COLUMN_NAME", "Icebox")
     ENV_VARIABLES.output_directory = os.getenv("OUTPUT_DIRECTORY", "output")
 
 
@@ -42,5 +44,6 @@ ENV_VARIABLES = EnvVariables(
     trello_api_key=os.getenv("TRELLO_API_KEY", "Trello API Key"),
     trello_api_token=os.getenv("TRELLO_API_TOKEN", "Trello API Token"),
     trello_board_name=os.getenv("TRELLO_BOARD_NAME", "Trello Board Name"),
+    trello_board_add_column_name=os.getenv("TRELLO_BOARD_ADD_COLUMN_NAME", "Icebox"),
     output_directory=os.getenv("OUTPUT_DIRECTORY", "output"),
 )

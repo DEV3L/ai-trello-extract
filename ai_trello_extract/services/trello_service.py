@@ -7,42 +7,39 @@ from trello import List as TrelloList
 from ai_trello_extract.dataclasses.categorized_list import CategorizedLists
 from ai_trello_extract.dataclasses.trello_card import TrelloCard
 from ai_trello_extract.functions import first
-from ai_trello_extract.services.trello_utilities import extract_card_info, trello_list_reducer
+
+from .trello_utilities import extract_card_info, trello_list_reducer
 
 
 def extract_card_info_from_list(trello_list: list[TrelloList]) -> list[TrelloCard]:
-    """
-    Extracts card information from a list of Trello lists.
-
-    Args:
-        trello_list (list[TrelloList]): A list of Trello lists.
-
-    Returns:
-        list[TrelloCard]: A list of TrelloCard dataclasses containing the extracted card information.
-    """
     return [extract_card_info(trello_list, card) for trello_list in trello_list for card in trello_list.list_cards()]
 
 
 class TrelloService:
     def __init__(self, client: TrelloClient):
-        """
-        Initializes the TrelloService with a Trello client.
-
-        Args:
-            client (TrelloClient): The Trello client to interact with the Trello API.
-        """
         self.client = client
 
+    def add_card_to_board(self, board_name: str, card_name: str, card_description: str):
+        pass
+        # board = self.get_board_by_name(board_name)
+        # board_list: list[TrelloList] = [
+        #     column
+        #     for column in self.get_lists_for_board(board)
+        #     if column.name == ENV_VARIABLES.trello_board_add_column_name
+        # ]
+        # target_list = board_list[0] if board_list else None
+        # if not target_list:
+        #     raise RuntimeError(f"No lists found on board '{board_name}'.")
+        # labels = self.get_labels_for_board(board)
+        # target_list.add_card(name=card_name, desc=card_description, labels=labels)
+
+        # logger.info(f"Card '{card_name}' added to list '{target_list.name}' on board '{board_name}'.")
+
+    # def get_labels_for_board(self, board: Board) -> list[Label]:
+    #     logger.debug(f"Retrieving labels for board: {board.name}")
+    #     return board.get_labels()
+
     def extract_cards_info(self, board: Board) -> CategorizedLists[TrelloCard]:
-        """
-        Extracts card information from a Trello board and categorizes it.
-
-        Args:
-            board (Board): The Trello board to extract card information from.
-
-        Returns:
-            CategorizedLists[TrelloCard]: A dataclass containing categorized lists of Trello cards.
-        """
         categorized_lists = self.categorize_lists(board)
 
         logger.debug(f"Extracting Trello Cards from categorized lists: {categorized_lists}")
@@ -55,15 +52,6 @@ class TrelloService:
         return CategorizedLists(backlog=planning, todo=todo, doing=doing, done=done)
 
     def categorize_lists(self, board: Board) -> CategorizedLists[TrelloList]:
-        """
-        Categorizes the lists of a Trello board.
-
-        Args:
-            board (Board): The Trello board to categorize lists from.
-
-        Returns:
-            CategorizedLists[TrelloList]: A dataclass containing categorized Trello lists.
-        """
         trello_lists = self.get_lists_for_board(board)
         filtered_trello_lists = filter(lambda trello_list: "_" != trello_list.name, trello_lists)
         return reduce(
@@ -73,18 +61,6 @@ class TrelloService:
         )
 
     def get_board_by_name(self, board_name: str) -> Board:
-        """
-        Retrieves a Trello board by its name.
-
-        Args:
-            board_name (str): The name of the Trello board to retrieve.
-
-        Returns:
-            Board: The Trello board with the specified name.
-
-        Raises:
-            RuntimeError: If the board with the specified name is not found.
-        """
         boards = self._list_boards()
         board = first(filter(lambda board: board.name == board_name, boards))
 
@@ -94,24 +70,9 @@ class TrelloService:
         return board
 
     def get_lists_for_board(self, board: Board) -> list[TrelloList]:
-        """
-        Retrieves all lists for a given Trello board.
-
-        Args:
-            board (Board): The Trello board to retrieve lists from.
-
-        Returns:
-            list[TrelloList]: A list of Trello lists from the specified board.
-        """
         logger.debug(f"Listing Trello Lists for board: {board.name}")
         return board.all_lists()
 
     def _list_boards(self) -> list[Board]:
-        """
-        Retrieves all boards for the Trello client.
-
-        Returns:
-            list[Board]: A list of all Trello boards.
-        """
         logger.debug("Listing Trello Boards")
         return self.client.list_boards()
