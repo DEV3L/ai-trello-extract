@@ -2,8 +2,10 @@ from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
-from trello import Board, Card
+from trello import Board, Card, Label
 from trello import List as TrelloList
+
+from ai_trello_extract.env_variables import ENV_VARIABLES
 
 from .trello_service import TrelloService
 
@@ -72,3 +74,42 @@ def test_get_lists_for_board(trello_service: TrelloService):
 
     assert lists == mock_lists
     mock_board.all_lists.assert_called_once()
+
+
+def test_add_card_to_board(trello_service: TrelloService, mock_board: Board, mock_trello_list: MagicMock):
+    mock_board.name = "Test Board"
+    mock_trello_list.name = "Test List"
+    mock_trello_list.add_card = MagicMock()
+
+    ENV_VARIABLES.trello_board_add_column_name = "Test List"
+
+    trello_service.get_board_by_name = MagicMock(return_value=mock_board)
+    trello_service.get_lists_for_board = MagicMock(return_value=[mock_trello_list])
+    trello_service.get_labels_for_board = MagicMock(return_value=[])
+
+    trello_service.add_card_to_board("Test Board", "Test Card", "Test Description", [])
+
+    mock_trello_list.add_card.assert_called_once_with(name="Test Card", desc="Test Description", labels=[])
+
+
+def test_add_card_to_board_no_list_found(trello_service: TrelloService, mock_board: Board):
+    mock_board.name = "Test Board"
+
+    ENV_VARIABLES.trello_board_add_column_name = "Nonexistent List"
+
+    trello_service.get_board_by_name = MagicMock(return_value=mock_board)
+    trello_service.get_lists_for_board = MagicMock(return_value=[])
+
+    with pytest.raises(RuntimeError, match="No lists found on board 'Test Board'."):
+        trello_service.add_card_to_board("Test Board", "Test Card", "Test Description", [])
+
+
+def test_get_labels_for_board(trello_service: TrelloService, mock_board: Board):
+    mock_board.name = "Test Board"
+    mock_labels = [MagicMock(spec=Label) for _ in range(3)]
+    mock_board.get_labels = MagicMock(return_value=mock_labels)
+
+    labels = trello_service.get_labels_for_board(mock_board)
+
+    assert labels == mock_labels
+    mock_board.get_labels.assert_called_once()
