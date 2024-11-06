@@ -167,10 +167,11 @@ def test_add_card_to_board():
     board_name = "Test Board"
     card_name = "Test Card"
     card_description = "This is a test card."
+    labels = ["labels"]
 
-    orchestration_service.add_card_to_board(board_name, card_name, card_description)
+    orchestration_service.add_card_to_board(board_name, card_name, card_description, labels)
 
-    mock_trello_service.add_card_to_board.assert_called_once_with(board_name, card_name, card_description)
+    mock_trello_service.add_card_to_board.assert_called_once_with(board_name, card_name, card_description, labels)
 
 
 def test_write_board_labels_to_file(tmpdir: Path):

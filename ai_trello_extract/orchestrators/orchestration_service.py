@@ -11,8 +11,8 @@ class OrchestrationService:
     def __init__(self, trello_service: TrelloService):
         self.trello_service = trello_service
 
-    def add_card_to_board(self, board_name: str, card_name: str, card_description: str):
-        self.trello_service.add_card_to_board(board_name, card_name, card_description)
+    def add_card_to_board(self, board_name: str, card_name: str, card_description: str, labels: list[str]):
+        self.trello_service.add_card_to_board(board_name, card_name, card_description, labels)
 
     def write_board_labels_to_file(self, board_name: str, directory: str) -> str:
         markdown_content = self.get_label_markdown(board_name)

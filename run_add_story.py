@@ -12,7 +12,9 @@ def main():
     )
 
     try:
-        orchestration_service.add_card_to_board(ENV_VARIABLES.trello_board_name, "Test API", "This is a test API")
+        orchestration_service.add_card_to_board(
+            ENV_VARIABLES.trello_board_name, "Test API", "This is a test API", ["Future"]
+        )
     except RuntimeError as e:
         logger.error(e)
 

@@ -43,6 +43,7 @@ path = ".venv"
 dependencies = ["pyright", "pytest", "pytest-cov"]
 
 [tool.hatch.envs.default.scripts]
+add-story = "python run_add_story.py"
 view-labels = "python run_view_labels.py"
 e2e = "python run_end_to_end.py"
 test = "pytest --cache-clear --cov --cov-report lcov --cov-report term"
